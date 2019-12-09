@@ -1,5 +1,6 @@
 // Require packages
 const express = require('express');
+const mongoose = require('mongoose');
 
 // Make new instance of express.
 const app = express();
