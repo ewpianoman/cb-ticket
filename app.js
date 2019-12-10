@@ -1,7 +1,7 @@
 // Require packages
 const express = require('express');
-const mongoose = require('mongoose');
 const hbs = require('express-handlebars');
+const mongoose = require('mongoose');
 const sassMiddleware = require('node-sass-middleware');
 
 // Make new instance of express.
@@ -13,6 +13,7 @@ const port = process.env.PORT || 3200;
 
 // Require routes
 const routes = require('./routes/index');
+const tickets = require('./routes/tickets');
 
 // View Engine Setup
 app.engine('hbs', hbs({extname: '.hbs', defaultLayout: 'layout'}));
@@ -30,7 +31,10 @@ app.use (
 // Middleware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
+
+// Set up routes.
 app.use('/', routes);
+app.use('/tickets', tickets);
 
 // Connect to Database
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
