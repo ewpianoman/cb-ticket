@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const tickets = require('../models/todos');
-router.get('/', function(req, res) {
-  res.render('todos', {title: 'Todos', todos: todos});
+
+router.get('/', function(req, res, next) {
+  res.render('index', {layout: 'layout', template: 'home-template'});
 });
+
 module.exports = router;
