@@ -1,5 +1,7 @@
 // Require packages
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const sassMiddleware = require('node-sass-middleware');
@@ -14,6 +16,7 @@ const port = process.env.PORT || 3200;
 // Require routes
 const routes = require('./routes/index');
 const tickets = require('./routes/tickets');
+const users = require('./routes/users');
 
 // View Engine Setup
 app.engine('hbs', hbs({extname: '.hbs', defaultLayout: 'layout'}));
@@ -35,6 +38,7 @@ app.use(bodyparser.urlencoded({ extended: false }));
 // Set up routes.
 app.use('/', routes);
 app.use('/tickets', tickets);
+app.use('/users', users);
 
 // Connect to Database
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
@@ -48,6 +52,10 @@ mongoose.connect(dbConnectionString + '/cb-ticket', dbOptions);
 
 
 // Start server
-app.listen(port, () => {
+https.createServer({
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem'),
+  passphrase: 'pianoman'
+}, app).listen(port, () => {
   console.log(`Server listening at port ${port}.`);
 });
