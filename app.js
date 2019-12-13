@@ -17,6 +17,11 @@ const port = process.env.PORT || 3200;
 const routes = require('./routes/index');
 const tickets = require('./routes/tickets');
 const users = require('./routes/users');
+const claims = require('./routes/claims');
+const devices = require('./routes/devices');
+const insurances = require('./routes/insurances');
+const students = require('./routes/students');
+const warranties = require('./routes/warranties');
 
 // View Engine Setup
 app.engine('hbs', hbs({extname: '.hbs', defaultLayout: 'layout'}));
@@ -39,6 +44,11 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use('/', routes);
 app.use('/tickets', tickets);
 app.use('/users', users);
+app.use('/claims', claims);
+app.use('/devices', devices);
+app.use('/insurance', insurances);
+app.use('/students', students);
+app.use('/warranty', warranties);
 
 // Connect to Database
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
