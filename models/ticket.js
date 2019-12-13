@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Promise = require('bluebird');
+const ObjectId = mongoose.Schema.Types.ObjectId;
+const User = require('./user');
+
 Promise.promisifyAll(mongoose);
 
 const TicketSchema = new Schema({
@@ -10,9 +13,9 @@ const TicketSchema = new Schema({
   done: Boolean,
   status: String,
   repairType: {type: String, required: true},
-  ticketOwner: {type: ObjectId, ref: 'User'}
+  ticketOwner: {type: ObjectId, ref: 'User', required: true}
 });
 
-const Ticket = mongoose.model('Ticket', TicketSchema);
+const Ticket = mongoose.model('Ticket', TicketSchema, 'tickets');
 
 module.exports = Ticket;

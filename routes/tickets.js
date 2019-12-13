@@ -34,12 +34,12 @@ router.route('/')
 router.route('/:id')
   // READ a single Ticket by ID
   .get(function(req, res, next) {
-    Ticket.findOneAsync({_id: req.params.id}, {})
-    .then(function(ticket) {
+    Ticket.findOne({_id: req.params.id}, {})
+    .populate('ticketOwner')
+    .exec(function (e, ticket) {
+      if (e) return console.error(e);
       res.json(ticket);
     })
-    .catch(next)
-    .error(console.error);
   })
   // UPDATE a Ticket
   .put(function(req, res, next) {

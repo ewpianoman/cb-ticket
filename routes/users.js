@@ -3,16 +3,16 @@ const router = express.Router();
 const User = require('../models/user');
 
 router.route('/')
-  // READ all tickets.
+  // READ all users.
   .get(function(req, res, next) {
     User.findAsync({})
-    .then(function(tickets) {
-      res.json(tickets);
+    .then(function(users) {
+      res.json(users);
     })
     .catch(next)
     .error(console.error);
   })
-  // CREATE new ticket.
+  // CREATE new user.
   .post(function(req, res, next) {
     let user = new User();
     let prop;
@@ -32,16 +32,16 @@ router.route('/')
   });
 
 router.route('/:id')
-  // READ a single Ticket by ID
+  // READ a single User by ID
   .get(function(req, res, next) {
-    User.findOneAsync({_id: req.params.id}, {})
-    .then(function(user) {
+    User.findOne({_id: req.params.id}, {})
+    .populate('tickets')
+    .exec(function (e, user) {
+      if (e) return console.error(e);
       res.json(user);
     })
-    .catch(next)
-    .error(console.error);
   })
-  // UPDATE a Ticket
+  // UPDATE a User
   .put(function(req, res, next) {
     let user = {};
     let prop;
@@ -56,7 +56,7 @@ router.route('/:id')
       return res.status(400).json({'status': 'fail', 'error': e});
     });
   })
-  // DELETE a Ticket
+  // DELETE a User
   .delete(function(req, res, next) {
     User.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedUser) {
