@@ -22,6 +22,7 @@ const devices = require('./routes/devices');
 const insurances = require('./routes/insurances');
 const students = require('./routes/students');
 const warranties = require('./routes/warranties');
+const invoices = require('./routes/invoices');
 
 // View Engine Setup
 app.engine('hbs', hbs({extname: '.hbs', defaultLayout: 'layout'}));
@@ -49,6 +50,7 @@ app.use('/devices', devices);
 app.use('/insurance', insurances);
 app.use('/students', students);
 app.use('/warranty', warranties);
+app.use('/invoices', invoices);
 
 // Connect to Database
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
