@@ -35,7 +35,10 @@ router.route('/:id')
   // READ a single Ticket by ID
   .get(function(req, res, next) {
     Ticket.findOne({_id: req.params.id}, {})
-    .populate('ticketOwner')
+    .populate('device')
+    .populate('ticketOwners')
+    .populate('createdBy')
+    .populate('invoice')
     .exec(function (e, ticket) {
       if (e) return console.error(e);
       res.json(ticket);
