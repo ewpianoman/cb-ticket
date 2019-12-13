@@ -36,12 +36,13 @@ router.route('/:id')
   .get(function(req, res, next) {
     Warranty.findOne({_id: req.params.id}, {})
     .populate('device')
+    .populate('claims')
     .exec(function (e, warranty) {
       if (e) return console.error(e);
       res.json(warranty);
     })
   })
-  // UPDATE an Warranty
+  // UPDATE a Warranty
   .put(function(req, res, next) {
     let warranty = {};
     let prop;

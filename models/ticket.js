@@ -18,7 +18,8 @@ const TicketSchema = new Schema({
   repairType: {type: String, required: true},
   ticketOwners: [{type: ObjectId, ref: 'User', required: true}],
   createdBy: {type: ObjectId, ref: 'User', required: true},
-  invoice: {type: ObjectId, ref: 'Invoice'}
+  invoice: {type: ObjectId, ref: 'Invoice'},
+  cost: Number
 });
 
 const Ticket = mongoose.model('Ticket', TicketSchema, 'tickets');

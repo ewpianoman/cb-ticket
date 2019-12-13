@@ -36,6 +36,7 @@ router.route('/:id')
   .get(function(req, res, next) {
     Insurance.findOne({_id: req.params.id}, {})
     .populate('device')
+    .populate('claims')
     .exec(function (e, insurance) {
       if (e) return console.error(e);
       res.json(insurance);

@@ -37,7 +37,7 @@ router.route('/:id')
     Device.findOne({_id: req.params.id}, {})
     .populate('student')
     .populate('tickets')
-    .populate('insurancePolicies')
+    .populate('insurance')
     .exec(function (e, device) {
       if (e) return console.error(e);
       res.json(device);
