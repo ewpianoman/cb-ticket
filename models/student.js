@@ -9,7 +9,7 @@ Promise.promisifyAll(mongoose);
 const StudentSchema = new Schema({
   firstName: {type: String, required: true},
   lastName: {type: String, required: true},
-  studentId: {type: Number, required: true},
+  studentId: Number,
   device: {type: ObjectId, ref: 'Device'},
   loaner: {type: ObjectId, ref: 'Device'}
 });

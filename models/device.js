@@ -11,6 +11,7 @@ Promise.promisifyAll(mongoose);
 
 const DeviceSchema = new Schema({
   serviceTag: {type: String, required: true},
+  model: {type: String, required: true},
   student: {type: ObjectId, ref: 'Student'},
   tickets: [{type: ObjectId, ref: 'Ticket'}],
   insurance: [{type: ObjectId, ref: 'Insurance'}],
