@@ -7,6 +7,7 @@ const Device = require('./device');
 Promise.promisifyAll(mongoose);
 
 const InsuranceSchema = new Schema({
+  active: {type: Boolean, required: 'true'},
   policyNumber: {type: String, required: 'true'},
   endDate: {type: Date, required: 'true'},
   device: {type: ObjectId, ref: 'Device'}
