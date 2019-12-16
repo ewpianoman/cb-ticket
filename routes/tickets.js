@@ -39,6 +39,7 @@ router.route('/:id')
     .populate('ticketOwners')
     .populate('createdBy')
     .populate('invoice')
+    .populate('parts')
     .exec(function (e, ticket) {
       if (e) return console.error(e);
       res.json(ticket);

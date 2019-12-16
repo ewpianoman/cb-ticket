@@ -36,6 +36,7 @@ router.route('/:id')
   .get(function(req, res, next) {
     Invoice.findOne({_id: req.params.id}, {})
     .populate('tickets')
+    .populate('parts')
     .exec(function (e, invoice) {
       if (e) return console.error(e);
       res.json(invoice);

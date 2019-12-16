@@ -5,6 +5,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const User = require('./user');
 const Device = require('./device');
 const Invoice = require('./invoice');
+const Part = require('./part');
 
 Promise.promisifyAll(mongoose);
 
@@ -19,6 +20,7 @@ const TicketSchema = new Schema({
   ticketOwners: [{type: ObjectId, ref: 'User', required: true}],
   createdBy: {type: ObjectId, ref: 'User', required: true},
   invoice: {type: ObjectId, ref: 'Invoice'},
+  parts: [{type: ObjectId, ref: 'Part'}],
   cost: Number
 });
 
