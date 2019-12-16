@@ -35,8 +35,8 @@ router.route('/:id')
   // READ a single Claim by ID
   .get(function(req, res, next) {
     Claim.findOne({_id: req.params.id}, {})
-    .populate('insurance')
-    .populate('warranty')
+    .populate('insurance', ['active', 'policyNumber', 'device', 'endDate'])
+    .populate('warranty', ['active', 'endDate', 'device'])
     .exec(function (e, claim) {
       if (e) return console.error(e);
       res.json(claim);
