@@ -35,7 +35,7 @@ router.route('/:id')
   // READ a single Insurance policy by ID
   .get(function(req, res, next) {
     Insurance.findOne({_id: req.params.id}, {})
-    .populate('device')
+    .populate('device', ['serviceTag', 'model', 'student'])
     .populate('claims')
     .exec(function (e, insurance) {
       if (e) return console.error(e);

@@ -35,7 +35,7 @@ router.route('/:id')
   // READ a single Warranty by ID
   .get(function(req, res, next) {
     Warranty.findOne({_id: req.params.id}, {})
-    .populate('device')
+    .populate('device', ['serviceTag', 'model'])
     .populate('claims')
     .exec(function (e, warranty) {
       if (e) return console.error(e);
