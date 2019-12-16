@@ -5,6 +5,7 @@ const fs = require('fs');
 const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const sassMiddleware = require('node-sass-middleware');
+const path = require('path');
 
 // Make new instance of express.
 const app = express();
@@ -37,6 +38,8 @@ app.use (
     debug: true,
   })
 );
+app.use(express.static(path.join(__dirname, 'public'))); // BELOW THIS
+app.use('/fonts', express.static(path.join(__dirname, 'node_modules/bootstrap-sass/assets/fonts')));
 
 // Middleware
 app.use(bodyparser.json());

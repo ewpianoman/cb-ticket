@@ -1,4 +1,15 @@
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
 $font-stack: "Lucida Grande", Helvetica, Arial, sans-serif;
+
 body {
   font: 14px $font-stack;
+  margin-top: 50px;
+
+  .card {
+    border: 1px solid #CCC;
+    margin: 25px;
+    padding: 0 15px 15px 15px;
+    border-radius: 5px;
+  }
 }

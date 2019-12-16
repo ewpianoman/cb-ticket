@@ -7,9 +7,11 @@ Promise.promisifyAll(mongoose);
 
 const PartSchema = new Schema({
   name: {type: String, required: 'true'},
+  model: {type: String, required: 'true'},
+  partNumber: String,
   used: {type: Boolean, required: 'true'},
   quantity: {type: Number, required: 'true'},
-  cost: {type: Number, required: 'true'}
+  cost: {type: Number, required: 'true'},
 });
 
 const Part = mongoose.model('Part', PartSchema, 'parts');

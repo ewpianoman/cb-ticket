@@ -1,1 +1,334 @@
-<p>Welcome to the {{title}} app!</p>
+<h1>API Documentation</h1>
+<p>Welcome to the {{title}} API! All of the endpoints and routes are documented below.</p>
+<h2>Endpoints</h2>
+
+<div class="card">
+  <h3 class="card-title"><code>/claims</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      type: String,
+      filed: Date,
+      shipped: Date,
+      received: Date,
+      closed: Boolean,
+      turnaround: Number,
+      workOrder: String,
+      confirmation: String,
+      insurance: [{type: ObjectId, ref: 'Insurance'}],
+      warranty: {type: ObjectId, ref: 'Warranty'}
+    }
+  </pre>
+  <h4>Routes</h4>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/devices</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      serviceTag: {type: String, required: true},
+      model: {type: String, required: true},
+      student: {type: ObjectId, ref: 'Student'},
+      tickets: [{type: ObjectId, ref: 'Ticket'}],
+      insurance: [{type: ObjectId, ref: 'Insurance'}],
+      warranty: {type: ObjectId, ref: 'Warranty'}
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/insurance</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      active: {type: Boolean, required: 'true'},
+      policyNumber: {type: String, required: 'true'},
+      endDate: {type: Date, required: 'true'},
+      device: {type: ObjectId, ref: 'Device'},
+      claims: [{type: ObjectId, ref: 'Claim'}]
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/invoices</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      date: Date,
+      billedDate: Date,
+      parts: [{type: ObjectId, ref: 'Part'}],
+      total: Number,
+      paid: Boolean,
+      ticket: {type: ObjectId, ref: 'Ticket'}
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/parts</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      name: {type: String, required: 'true'},
+      model: {type: String, required: 'true'},
+      partNumber: String,
+      used: {type: Boolean, required: 'true'},
+      quantity: {type: Number, required: 'true'},
+      cost: {type: Number, required: 'true'},
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/students</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      firstName: {type: String, required: true},
+      lastName: {type: String, required: true},
+      studentId: Number,
+      device: {type: ObjectId, ref: 'Device'},
+      loaner: {type: ObjectId, ref: 'Device'}
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/tickets</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      open: {type: Date, required: true},
+      close: Date,
+      description: {type: String, required: true},
+      device: {type: ObjectId, ref: 'Device', required: true},
+      done: Boolean,
+      status: String,
+      repairType: {type: String, required: true},
+      ticketOwners: [{type: ObjectId, ref: 'User', required: true}],
+      createdBy: {type: ObjectId, ref: 'User', required: true},
+      invoice: {type: ObjectId, ref: 'Invoice'},
+      parts: [{type: ObjectId, ref: 'Part'}],
+      cost: Number
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/users</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      firstName: {type: String, required: true},
+      lastName: {type: String, required: true},
+      email: {type: String, required: true},
+      username: {type: String, required: true},
+      tickets: [{type: ObjectId, ref: 'Ticket'}]
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
+<div class="card">
+  <h3 class="card-title"><code>/warranty</code></h3>
+  <h4>Model</h4>
+  <pre>
+    {
+      active: {type: Boolean, required: 'true'},
+      endDate: {type: Date, required: 'true'},
+      device: {type: ObjectId, ref: 'Device'},
+      claims: [{type: ObjectId, ref: 'Claim'}]
+    }
+  </pre>
+  <ul>
+    <li>
+      <code>GET /</code>
+      <p>Read all records.</p>
+    </li>
+    <li>
+      <code>POST /</code>
+      <p>Create a new reord.</p>
+    </li>
+    <li>
+      <code>GET /:id</code>
+      <p>Read 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>PUT /:id</code>
+      <p>Update 1 reord by ID.</p>
+    </li>
+    <li>
+      <code>DELETE /:id</code>
+      <p>Delete 1 reord by ID.</p>
+    </li>
+  </ul>
+</div>
