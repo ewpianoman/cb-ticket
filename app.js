@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // Require packages
 const express = require('express');
 const https = require('https');
@@ -64,9 +66,6 @@ const dbOptions = {
   useUnifiedTopology: true
 }
 mongoose.connect(dbConnectionString + '/cb-ticket', dbOptions);
-
-// Set up routes
-
 
 // Start server
 https.createServer({
