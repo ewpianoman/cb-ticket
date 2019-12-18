@@ -1,70 +1,86 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
-const User = require('../models/user');
+const auth = require('./auth');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
-router.route('/')
-  // READ all users.
-  .get(function(req, res, next) {
-    User.findAsync({})
-    .then(function(users) {
-      res.json(users);
-    })
-    .catch(next)
-    .error(console.error);
-  })
-  // CREATE new user.
-  .post(function(req, res, next) {
-    let user = new User();
-    let prop;
-    for (prop in req.body) {
-      user[prop] = req.body[prop];
-    }
-    user.saveAsync()
-    .then(function(user) {
-      console.log('success');
-      res.json({'status': 'success', 'user': user});
-    })
-    .catch(function(e) {
-      console.log('fail');
-      res.json({'status': 'error', 'error': e});
-    })
-    .error(console.error);
-  });
+//POST new user route (optional, everyone has access)
+router.post('/', auth.optional, (req, res, next) => {
+  const { body: { user } } = req;
 
-router.route('/:id')
-  // READ a single User by ID
-  .get(function(req, res, next) {
-    User.findOne({_id: req.params.id}, {})
-    .populate('tickets')
-    .exec(function (e, user) {
-      if (e) return console.error(e);
-      res.json(user);
-    })
-  })
-  // UPDATE a User
-  .put(function(req, res, next) {
-    let user = {};
-    let prop;
-    for (prop in req.body) {
-      user[prop] = req.body[prop];
+  if (!user.email) {
+    return res.status(422).json({
+      errors: {
+        email: 'is required',
+      },
+    });
+  }
+
+  if (!user.password) {
+    return res.status(422).json({
+      errors: {
+        password: 'is required',
+      },
+    });
+  }
+
+  const finalUser = new User(user);
+
+  finalUser.setPassword(user.password);
+
+  return finalUser.save()
+    .then(() => res.json({ user: finalUser.toAuthJSON() }));
+});
+
+//POST login route (optional, everyone has access)
+router.post('/login', auth.optional, (req, res, next) => {
+  const { body: { user } } = req;
+
+  if (!user.email) {
+    return res.status(422).json({
+      errors: {
+        email: 'is required',
+      },
+    });
+  }
+
+  if (!user.password) {
+    return res.status(422).json({
+      errors: {
+        password: 'is required',
+      },
+    });
+  }
+
+  return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+    if(err) {
+      return next(err);
     }
-    User.updateAsync({_id: req.params.id}, user)
-    .then(function(updatedUser) {
-      return res.json({'status': 'success', 'user': updatedUser})
-    })
-    .catch(function(e) {
-      return res.status(400).json({'status': 'fail', 'error': e});
+
+    if (passportUser) {
+      const user = passportUser;
+      user.token = passportUser.generateJWT();
+
+      return res.json({ user: user.toAuthJSON() });
+    }
+
+    return status(400).info;
+  })(req, res, next);
+});
+
+//GET current route (required, only authenticated users have access)
+router.get('/current', auth.required, (req, res, next) => {
+  const { payload: { id } } = req;
+
+  return User.findById(id)
+    .then((user) => {
+      if(!user) {
+        return res.sendStatus(400);
+      }
+
+      return res.json({ user: user.toAuthJSON() });
     });
-  })
-  // DELETE a User
-  .delete(function(req, res, next) {
-    User.findByIdAndRemoveAsync(req.params.id)
-    .then(function(deletedUser) {
-      res.json({'status': 'success', 'user': deletedUser});
-    })
-    .catch(function(e) {
-      res.status(400).json({'status': 'fail', 'error': e})
-    });
-  });
+});
 
 module.exports = router;

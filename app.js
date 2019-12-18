@@ -71,7 +71,7 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
-// Set up routes.
+// Register routes.
 app.use('/', routes);
 app.use('/tickets', tickets);
 app.use('/users', users);
@@ -82,6 +82,7 @@ app.use('/students', students);
 app.use('/warranty', warranties);
 app.use('/invoices', invoices);
 app.use('/parts', parts);
+app.use(require('./routes'));
 
 // Configure Mongoose
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
@@ -91,6 +92,10 @@ const dbOptions = {
 }
 mongoose.connect(dbConnectionString + '/cb-ticket', dbOptions);
 mongoose.set('debug', true);
+
+// Require Config files
+require('./config/passport');
+require('./models/user');
 
 // Error handlers & middlewares
 if (!isProduction) {
