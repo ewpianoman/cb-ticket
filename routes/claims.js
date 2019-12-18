@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Claim = require('../models/claim');
+const auth = require('./auth');
 
 router.route('/')
   // READ all Claims.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Claim.findAsync({})
     .then(function(claims) {
       res.json(claims);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new Claim.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let claim = new Claim();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Claim by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Claim.findOne({_id: req.params.id}, {})
     .populate('insurance', ['active', 'policyNumber', 'device', 'endDate'])
     .populate('warranty', ['active', 'endDate', 'device'])
@@ -43,7 +44,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Claim
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let claim = {};
     let prop;
     for (prop in req.body) {
@@ -58,7 +59,7 @@ router.route('/:id')
     });
   })
   // DELETE a Claim
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Claim.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedClaim) {
       res.json({'status': 'success', 'claim': deletedClaim});

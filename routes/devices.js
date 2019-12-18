@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Device = require('../models/device');
+const auth = require('./auth');
 
 router.route('/')
   // READ all device.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Device.findAsync({})
     .then(function(devices) {
       res.json(devices);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new device.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let device = new Device();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Device by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Device.findOne({_id: req.params.id}, {})
     .populate('student')
     .populate('tickets')
@@ -44,7 +45,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Device
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let device = {};
     let prop;
     for (prop in req.body) {
@@ -59,7 +60,7 @@ router.route('/:id')
     });
   })
   // DELETE a Device
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Device.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedDevice) {
       res.json({'status': 'success', 'device': deletedDevice});

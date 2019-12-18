@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Invoice = require('../models/invoice');
+const auth = require('./auth');
 
 router.route('/')
   // READ all Invoices.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Invoice.findAsync({})
     .then(function(invoices) {
       res.json(invoices);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new Invoice.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let invoice = new Invoice();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Invoice by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Invoice.findOne({_id: req.params.id}, {})
     .populate('tickets')
     .populate('parts')
@@ -43,7 +44,7 @@ router.route('/:id')
     })
   })
   // UPDATE an Invoice
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let invoice = {};
     let prop;
     for (prop in req.body) {
@@ -58,7 +59,7 @@ router.route('/:id')
     });
   })
   // DELETE an Invoice
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Invoice.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedInvoice) {
       res.json({'status': 'success', 'invoice': deletedInvoice});

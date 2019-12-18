@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/student');
+const auth = require('./auth');
 
 router.route('/')
   // READ all students.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Student.findAsync({})
     .then(function(students) {
       res.json(students);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new student.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let student = new Student();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Student by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Student.findOne({_id: req.params.id}, {})
     .populate('device')
     .populate('loaner')
@@ -43,7 +44,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Student
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let student = {};
     let prop;
     for (prop in req.body) {
@@ -58,7 +59,7 @@ router.route('/:id')
     });
   })
   // DELETE a Student
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Student.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedStudent) {
       res.json({'status': 'success', 'student': deletedStudent});

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Ticket = require('../models/ticket');
+const auth = require('./auth');
 
 router.route('/')
   // READ all tickets.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Ticket.findAsync({})
     .then(function(tickets) {
       res.json(tickets);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new ticket.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let ticket = new Ticket();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Ticket by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Ticket.findOne({_id: req.params.id}, {})
     .populate('device')
     .populate('ticketOwners')
@@ -46,7 +47,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Ticket
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let ticket = {};
     let prop;
     for (prop in req.body) {
@@ -61,7 +62,7 @@ router.route('/:id')
     });
   })
   // DELETE a Ticket
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Ticket.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedTicket) {
       res.json({'status': 'success', 'ticket': deletedTicket});

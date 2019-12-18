@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Warranty = require('../models/warranty');
+const auth = require('./auth');
 
 router.route('/')
   // READ all Warranties.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Warranty.findAsync({})
     .then(function(warranties) {
       res.json(warranties);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new Warranty.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let warranty = new Warranty();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Warranty by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Warranty.findOne({_id: req.params.id}, {})
     .populate('device', ['serviceTag', 'model'])
     .populate('claims')
@@ -43,7 +44,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Warranty
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let warranty = {};
     let prop;
     for (prop in req.body) {
@@ -58,7 +59,7 @@ router.route('/:id')
     });
   })
   // DELETE a Warranty
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Warranty.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedWarranty) {
       res.json({'status': 'success', 'warranty': deletedWarranty});

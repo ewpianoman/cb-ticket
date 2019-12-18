@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Insurance = require('../models/insurance');
+const auth = require('./auth');
 
 router.route('/')
   // READ all insurance policies.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Insurance.findAsync({})
     .then(function(insurances) {
       res.json(insurances);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new insurance policy.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let insurance = new Insurance();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Insurance policy by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Insurance.findOne({_id: req.params.id}, {})
     .populate('device', ['serviceTag', 'model', 'student'])
     .populate('claims')
@@ -43,7 +44,7 @@ router.route('/:id')
     })
   })
   // UPDATE an Insurance Policy
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let insurance = {};
     let prop;
     for (prop in req.body) {
@@ -58,7 +59,7 @@ router.route('/:id')
     });
   })
   // DELETE an Insurance policy
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Insurance.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedInsurance) {
       res.json({'status': 'success', 'insurance': deletedInsurance});

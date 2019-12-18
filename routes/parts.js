@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Part = require('../models/part');
+const auth = require('./auth');
 
 router.route('/')
   // READ all Parts.
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Part.findAsync({})
     .then(function(parts) {
       res.json(parts);
@@ -13,7 +14,7 @@ router.route('/')
     .error(console.error);
   })
   // CREATE new Part.
-  .post(function(req, res, next) {
+  .post(auth.required, function(req, res, next) {
     let part = new Part();
     let prop;
     for (prop in req.body) {
@@ -33,7 +34,7 @@ router.route('/')
 
 router.route('/:id')
   // READ a single Part by ID
-  .get(function(req, res, next) {
+  .get(auth.required, function(req, res, next) {
     Part.findOne({_id: req.params.id}, {})
     .exec(function (e, part) {
       if (e) return console.error(e);
@@ -41,7 +42,7 @@ router.route('/:id')
     })
   })
   // UPDATE a Part
-  .put(function(req, res, next) {
+  .put(auth.required, function(req, res, next) {
     let part = {};
     let prop;
     for (prop in req.body) {
@@ -56,7 +57,7 @@ router.route('/:id')
     });
   })
   // DELETE a Part
-  .delete(function(req, res, next) {
+  .delete(auth.required, function(req, res, next) {
     Part.findByIdAndRemoveAsync(req.params.id)
     .then(function(deletedPart) {
       res.json({'status': 'success', 'part': deletedPart});
