@@ -1,13 +1,36 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const Joi = require('@hapi/joi');
 
 const { Schema } = mongoose;
 
 const UsersSchema = new Schema({
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+    unique: true
+  },
   hash: String,
   salt: String,
+  firstName: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 50
+  },
+  lastName: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlenght: 50
+  },
+  // Give admin rights if admin
+  isAdmin: Boolean,
+  // Give full access if superuser
+  isSuper: Boolean
 });
 
 UsersSchema.methods.setPassword = function(password) {
@@ -40,4 +63,5 @@ UsersSchema.methods.toAuthJSON = function() {
   };
 };
 
-mongoose.model('User', UsersSchema);
+const User = mongoose.model('User', UsersSchema);
+module.exports = User;

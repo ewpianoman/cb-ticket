@@ -12,6 +12,7 @@
   "author": "Eric M. Wilson <eric@virtuoso.design>",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^16.1.8",
     "body-parser": "^1.19.0",
     "bootstrap-sass": "^3.4.1",
     "config": "^3.2.4",

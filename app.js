@@ -88,7 +88,8 @@ app.use(require('./routes'));
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
 const dbOptions = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 }
 mongoose.connect(dbConnectionString + '/cb-ticket', dbOptions);
 mongoose.set('debug', true);

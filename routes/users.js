@@ -3,25 +3,26 @@ const passport = require('passport');
 const router = express.Router();
 const auth = require('./auth');
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
+const User = require('../models/user');
 
 //POST new user route (optional, everyone has access)
-router.post('/', auth.optional, (req, res, next) => {
+router.post('/', auth.optional, async (req, res, next) => {
   const { body: { user } } = req;
 
+  // Make sure user has email
   if (!user.email) {
     return res.status(422).json({
       errors: {
-        email: 'is required',
-      },
+        email: 'is required'
+      }
     });
   }
 
   if (!user.password) {
     return res.status(422).json({
       errors: {
-        password: 'is required',
-      },
+        password: 'is required'
+      }
     });
   }
 
