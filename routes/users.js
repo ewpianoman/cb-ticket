@@ -2,12 +2,12 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const auth = require('./auth');
-const validate = require('./validate');
+const validateEmail = require('./validate');
 const mongoose = require('mongoose');
 const User = require('../models/user');
 
 //POST new user route (optional, everyone has access)
-router.post('/', [auth.optional, validate], async (req, res, next) => {
+router.post('/', [auth.optional, validateEmail], async (req, res, next) => {
   const { body: { user } } = req;
 
   // Make sure user has email

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 
-const validate = (req, res, next) => {
+const validateEmail = (req, res, next) => {
   const email = req.body.user.email;
   let existingUser = User.findOne({ email: email }, (err, user) => {
     if (err) {
@@ -19,4 +19,4 @@ const validate = (req, res, next) => {
   });
 };
 
-module.exports = validate;
+module.exports = validateEmail;
