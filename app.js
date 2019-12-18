@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 // Require packages
+const config = require('config');
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
@@ -8,13 +9,28 @@ const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const sassMiddleware = require('node-sass-middleware');
 const path = require('path');
-
-// Make new instance of express.
-const app = express();
 const bodyparser = require('body-parser');
+const session = require('express-session');
+const cors = require('cors');
+const errorHandler = require('errorhandler');
+
+// use config module to get the privatekey, if no privatekey set, end the application
+if (!config.get('privatekey')) {
+  console.error('FATAL ERROR: privatekey is not defined.');
+  process.exit(1);
+}
 
 // Create port for server.
 const port = process.env.PORT || 3200;
+
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
+
+//Configure isProduction variable
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Make new instance of express.
+const app = express();
 
 // Require routes
 const routes = require('./routes/index');
@@ -40,12 +56,20 @@ app.use (
     debug: true,
   })
 );
-app.use(express.static(path.join(__dirname, 'public'))); // BELOW THIS
+
 app.use('/fonts', express.static(path.join(__dirname, 'node_modules/bootstrap-sass/assets/fonts')));
 
-// Middleware
-app.use(bodyparser.json());
+// Register Middleware
+app.use(cors());
+app.use(require('morgan')('dev'));
 app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: config.get('privatekey'), cookie: {maxAge: 60000}, resave: false, saveUninitialized: false}));
+
+if (!isProduction) {
+  app.use(errorHandler());
+}
 
 // Set up routes.
 app.use('/', routes);
@@ -59,13 +83,39 @@ app.use('/warranty', warranties);
 app.use('/invoices', invoices);
 app.use('/parts', parts);
 
-// Connect to Database
+// Configure Mongoose
 const dbConnectionString = process.env.MONGODB_URI || 'mongodb://localhost';
 const dbOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }
 mongoose.connect(dbConnectionString + '/cb-ticket', dbOptions);
+mongoose.set('debug', true);
+
+// Error handlers & middlewares
+if (!isProduction) {
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
+
+    res.json({
+      errors: {
+        message: err.message,
+        error: err
+      }
+    });
+  });
+}
+
+app.use((err, req, res) => {
+  res.status(err.status || 500);
+
+  res.json({
+    errors: {
+      message: err.message,
+      error: {}
+    }
+  })
+});
 
 // Start server
 https.createServer({
