@@ -30,7 +30,7 @@ const UsersSchema = new Schema({
   // Give admin rights if admin
   isAdmin: Boolean,
   // Give full access if superuser
-  isSuper: Boolean
+  isSuperUser: Boolean
 });
 
 UsersSchema.methods.setPassword = function(password) {

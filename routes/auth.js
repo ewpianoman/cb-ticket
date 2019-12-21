@@ -21,6 +21,18 @@ const auth = {
     userProperty: 'payload',
     getToken: getTokenFromHeaders,
     credentialsRequired: false
+  }),
+  admin: jwt({
+    secret: 'secret',
+    userProperty: 'payload',
+    getToken: getTokenFromHeaders,
+    isAdmin: true
+  }),
+  superUser: jwt({
+    secret: 'secret',
+    userProperty: 'payload',
+    getToken: getTokenFromHeaders,
+    isSuperUser: true
   })
 };
 
